@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <title>操作你的PPT</title>
+</head>
+<body>
+    <div id="main" style="width:100vw;height:100vh;">
+        <p id="note"></p>
+    </div>
+    <script src="hammer.min.js"></script>
+    <script>
+        //const note = document.querySelector("#node")
+
+        function httpGet(url, cb) {
+            fetch(url, {
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                method: 'GET'
+            }).then(response => response.text())
+                .then(text => {
+                    cb(text)
+                })
+                .catch(e => {
+                    return null
+                })
+        }
+
+        const note = document.querySelector("#note");
+
+
+        setInterval(() => {
+            httpGet('/getNote', (text) => {
+                console.log(text)
+                note.innerText = text
+            })
+        }, 1000)
+
+        function nextPage() {
+            httpGet('/next', (text) => {
+                console.log(text)
+            })
+        }
+
+        function previousPage() {
+            httpGet('/previous', (text) => {
+                console.log(text)
+            })
+        }
+
+        var hammer = new Hammer(document.querySelector("#main"));
+        hammer.on("swipeleft", function () {
+            nextPage();
+        });
+        hammer.on("swiperight", function () {
+            previousPage();
+        });
+
+        
+    </script>
+</body>
+</html>
