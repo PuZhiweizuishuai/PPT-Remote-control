@@ -95,6 +95,7 @@ namespace PhoneAsPrompter
                 var response = context.Response;
                 string path = request.Path.Value;
                 response.ContentType = "application/json; charset=UTF-8";
+                bool hasRun = true;
                 if (path == "/report")
                 {
                     string value = request.Query["value"];
@@ -132,9 +133,25 @@ namespace PhoneAsPrompter
                         {
                             return;
                         }
-                        T(T(this.presentation.SlideShowWindow).View).Next();
+                        try
+                        {
+                            T(T(this.presentation.SlideShowWindow).View).Next();
+                            hasRun = true;
+                        } catch (COMException e)
+                        {
+                            hasRun = false;
+                        }
+                        
                     }));
-                    await response.WriteAsync("OK");
+
+                    if (hasRun)
+                    {
+                        await response.WriteAsync("OK");
+                    }
+                    else
+                    {
+                        await response.WriteAsync("NO");
+                    }
                 }
                 else if (path == "/previous")
                 {
@@ -144,9 +161,26 @@ namespace PhoneAsPrompter
                         {
                             return;
                         }
-                        T(T(this.presentation.SlideShowWindow).View).Previous();
+                        try
+                        {
+                            T(T(this.presentation.SlideShowWindow).View).Previous();
+                            hasRun = true;
+                        }
+                        catch (COMException e)
+                        {
+                            hasRun = false;
+                        }
+                        
                     }));
-                    await response.WriteAsync("OK");
+                    if (hasRun)
+                    {
+                        await response.WriteAsync("OK");
+                    }
+                    else
+                    {
+                        await response.WriteAsync("NO");
+                    }
+                    
                 }
                 else
                 {
@@ -272,6 +306,16 @@ namespace PhoneAsPrompter
         private void urlLable_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("explorer.exe", this.ip);
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("explorer.exe", "https://github.com/yangzhongke/PhoneAsPrompter");
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("explorer.exe", "https://github.com/PuZhiweizuishuai/PPT-Remote-control");
         }
     }
 }

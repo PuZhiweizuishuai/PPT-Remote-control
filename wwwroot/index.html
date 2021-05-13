@@ -4,6 +4,11 @@
 <head>
     <meta charset="utf-8" />
     <title>操作你的PPT</title>
+    <style>
+        div {
+            font-size:25px
+        }
+    </style>
 </head>
 <body>
     <div id="main" style="width:100vw;height:100vh;">
@@ -31,22 +36,28 @@
         const note = document.querySelector("#note");
 
 
-        setInterval(() => {
+        let getNotes = setInterval(() => {
             httpGet('/getNote', (text) => {
-                console.log(text)
+                
                 note.innerText = text
             })
         }, 1000)
 
         function nextPage() {
             httpGet('/next', (text) => {
-                console.log(text)
+                if (text == 'NO') {
+                    clearInterval(getNotes)
+                    note.innerText = "幻灯片播放完毕！"
+                }
             })
         }
 
         function previousPage() {
             httpGet('/previous', (text) => {
-                console.log(text)
+                if (text == 'NO') {
+                    clearInterval(getNotes)
+                    note.innerText = "幻灯片播放完毕！"
+                }
             })
         }
 

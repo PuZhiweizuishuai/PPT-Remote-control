@@ -124,22 +124,24 @@ namespace PhoneAsPrompter
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(31, 407);
+            this.linkLabel1.Location = new System.Drawing.Point(31, 377);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(514, 20);
             this.linkLabel1.TabIndex = 9;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "本项目参考：https://github.com/yangzhongke/PhoneAsPrompter 完成\r\n";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // linkLabel2
             // 
             this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(31, 431);
+            this.linkLabel2.Location = new System.Drawing.Point(31, 401);
             this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(84, 20);
+            this.linkLabel2.Size = new System.Drawing.Size(506, 20);
             this.linkLabel2.TabIndex = 10;
             this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "完整代码：";
+            this.linkLabel2.Text = "完整代码：https://github.com/PuZhiweizuishuai/PPT-Remote-control";
+            this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
             // openFileDialog
             // 

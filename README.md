@@ -15,7 +15,11 @@ video：https://www.bilibili.com/video/BV1kK4y1A77e
 视频：https://www.bilibili.com/video/BV1kK4y1A77e
 
 
+## screenshot 截图
 
+主程序显示效果
+
+![APP.png](https://z3.ax1x.com/2021/05/13/gDZUBV.png "APP")
 
 ## Step one: ##
 Your phone and your computer should be in the same network.
