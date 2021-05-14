@@ -6,6 +6,13 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>2021051306075326_easyicon_net_512.ico</ApplicationIcon>
     <SignAssembly>true</SignAssembly>
+    <AssemblyName>PPT遥控器</AssemblyName>
+    <AssemblyOriginatorKeyFile>buguagaoshu.pfx</AssemblyOriginatorKeyFile>
+    <Authors>蒲致威</Authors>
+    <Company>不挂高数 www.buguagaoshu.com</Company>
+    <Description>PPT遥控器是一款通过网页遥控当前正在播放PPT的小工具，并且可以在移动端实时显示当前页PPT注释，你可以到https://github.com/PuZhiweizuishuai/PPT-Remote-control 获取源码。</Description>
+    <PackageProjectUrl>https://github.com/PuZhiweizuishuai/PPT-Remote-control</PackageProjectUrl>
+    <Copyright>https://github.com/PuZhiweizuishuai/PPT-Remote-control</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

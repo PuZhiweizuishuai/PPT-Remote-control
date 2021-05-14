@@ -15,6 +15,10 @@ video：https://www.bilibili.com/video/BV1kK4y1A77e
 视频：https://www.bilibili.com/video/BV1kK4y1A77e
 
 
+# Download 下载地址
+
+https://gitee.com/puzhiweizuishuai/PPT-Remote-control/releases/v1.0.0
+
 ## screenshot 截图
 
 主程序显示效果
