@@ -4,8 +4,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationIcon>2021051306075326_easyicon_net_512.ico</ApplicationIcon>
-    <SignAssembly>true</SignAssembly>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <SignAssembly>false</SignAssembly>
     <AssemblyName>PPT遥控器</AssemblyName>
     <AssemblyOriginatorKeyFile>buguagaoshu.pfx</AssemblyOriginatorKeyFile>
     <Authors>蒲致威</Authors>

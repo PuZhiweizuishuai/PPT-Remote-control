@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using SkiaSharp.QrCode.Image;
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -27,9 +29,19 @@ namespace PhoneAsPrompter
 
         private COMReferenceTracker comReference = new COMReferenceTracker();
 
+        private static readonly string AUTH_KEY = "auth";
+
+        private static Hashtable user = new Hashtable();
+
         public Form1()
         {
             InitializeComponent();
+            // 检查网络连接
+            if (!NetworkInterface.GetIsNetworkAvailable())
+            {
+                MessageBox.Show("网络未连接，程序可能会运行异常，请连接网络后重试！");
+            }
+            // 显示IP
             ShowUrl();
             // 配置服务器
             this.webHost = new WebHostBuilder()
@@ -58,18 +70,7 @@ namespace PhoneAsPrompter
 
         private void ShowUrl()
         {
-            this.ip = "http://";
-            string name = Dns.GetHostName();
-            IPAddress[] ipadrlist = Dns.GetHostAddresses(name);
-            foreach (IPAddress ipa in ipadrlist)
-            {
-                if (ipa.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    ip += ipa.ToString() + ":" + port;
-                    break;
-                }
-            }
-           
+            this.ip = "http://" + GetIPUtil.IPV4() + ":" + port;
 
             this.urlLable.Text = "请扫描二维码或者用浏览器打开：" + ip;
             this.urlLable.Links.Add(15, ip.Length, ip);
@@ -84,10 +85,32 @@ namespace PhoneAsPrompter
 
         }
 
+        private bool IsAuth(IRequestCookieCollection cookies, HttpResponse response)
+        {
+            foreach(var cookie in cookies)
+            {
+                if (cookie.Key == AUTH_KEY)
+                {
+                    if (user.ContainsKey(cookie.Value))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            CookieOptions cookieOptions = new();
+            cookieOptions.HttpOnly = true;
+            cookieOptions.Path = "/";
+            response.Cookies.Append(AUTH_KEY, Guid.NewGuid().ToString("N"), cookieOptions);
+            return false;
+ 
+        }
+
         private void ConfigureWebApp(IApplicationBuilder app)
         {
             app.UseDefaultFiles();
             app.UseStaticFiles();
+           
             app.Run(async (context) =>
             {
                 // 处理非静态请求 
@@ -96,7 +119,10 @@ namespace PhoneAsPrompter
                 string path = request.Path.Value;
                 response.ContentType = "application/json; charset=UTF-8";
                 bool hasRun = true;
-                if (path == "/report")
+
+                IsAuth(request.Cookies, response);
+
+                if (path == "/api/report")
                 {
                     string value = request.Query["value"];
                     this.BeginInvoke(new Action(() => {
@@ -105,9 +131,9 @@ namespace PhoneAsPrompter
                     response.StatusCode = 200;
                     await response.WriteAsync("ok");
                 }
-                else if (path == "/getNote")
+                else if (path == "/api/getNote")
                 {
-                    string notesText = null;
+                    string notesText = "";
                     this.Invoke(new Action(() => {
                         if (this.presentation == null)
                         {
@@ -125,7 +151,7 @@ namespace PhoneAsPrompter
                     }));
                     await response.WriteAsync(notesText);
                 }
-                else if (path == "/next")
+                else if (path == "/api/next")
                 {
                     response.StatusCode = 200;
                     this.Invoke(new Action(() => {
@@ -153,7 +179,7 @@ namespace PhoneAsPrompter
                         await response.WriteAsync("NO");
                     }
                 }
-                else if (path == "/previous")
+                else if (path == "/api/previous")
                 {
                     response.StatusCode = 200;
                     this.Invoke(new Action(() => {
@@ -190,7 +216,11 @@ namespace PhoneAsPrompter
             
         }
 
-
+        /// <summary>
+        /// 获取页面注释文本
+        /// </summary>
+        /// <param name="part">页码</param>
+        /// <returns></returns>
         private string GetInnerText(dynamic part)
         {
             StringBuilder sb = new StringBuilder();
